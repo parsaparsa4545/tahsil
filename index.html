@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <title>SPT|ثبت پیشرفت تحصیلی</title>
+  <link rel='stylesheet' type='text/css' media='screen' href='bbs.css'>
+  <link rel="shortcut icon" href="ico.ico" type="image/x-icon">
+  <script src="chart.js"></script>
+</head>
+
+<body>
+
+  <div class="sho">
+    <div class="ss">
+      <h1>خوش اومدی</h1>
+      <h2>تو میتونی توی اینجا پیشرفتت را در تحصیلت ببینی</h2>
+      <h2>ومثل ستاره ها بدرخشی</h2>
+    </div>
+
+  </div>
+
+  <div class="rtr">
+    <div class="cdr">
+      <h1>این پایین باید زمان مطالعه روزانه تو بر حسب دقیقه بنویسی</h1>
+    </div>
+    
+  </div>
+
+  <div class="tam">
+    <div class="header">
+      <div></div>
+      <div id="today"></div>
+    </div>
+
+    <div class="container">
+      <input type="date" id="date" class="det">
+      <div class="row">
+
+        <input type="number" id="zist" class="ok" class="ok" placeholder="زیست">
+        <button class="der" onclick="addData('زیست')">ثبت</button>
+        <button class="der" onclick="showChart('زیست')">نمودار</button>
+      </div>
+
+      <div class="row">
+        <input type="number" id="riazi" class="ok" placeholder="ریاضی">
+        <button class="der" onclick="addData('ریاضی')">ثبت</button>
+        <button class="der" onclick="showChart('ریاضی')">نمودار</button>
+      </div>
+
+      <div class="row">
+        <input type="number" id="fizik" class="ok" placeholder="فیزیک">
+        <button class="der" onclick="addData('فیزیک')">ثبت</button>
+        <button class="der" onclick="showChart('فیزیک')">نمودار</button>
+      </div>
+
+      <div class="row">
+        <input type="number" id="shimi" class="ok" placeholder="شیمی">
+        <button class="der" onclick="addData('شیمی')">ثبت</button>
+        <button class="der" onclick="showChart('شیمی')">نمودار</button>
+      </div>
+
+      <div class="row">
+        <input type="number" id="eng" class="ok" placeholder="انگلیسی">
+        <button class="der" onclick="addData('انگلیسی')">ثبت</button>
+        <button class="der" onclick="showChart('انگلیسی')">نمودار</button>
+      </div>
+
+      <div class="row">
+        <input type="number" id="tak" class="ok" placeholder="زمان تکلیف انجام دادن (دقیقه)">
+        <button class="der" onclick="addData('تکالیف')">ثبت</button>
+        <button class="der" onclick="showChart('تکالیف')">نمودار</button>
+      </div>
+
+      <div class="row">
+        <button class="am" onclick="resetTodayData()">پاک کردن اطلاعات امروز</button>
+      </div>
+
+
+
+      <div class="row">
+        <button class="res" >بازگشت به اول</button>
+        <!--onclick="resetData()!-->
+      </div>
+
+    </div>
+    <div class="chart-container">
+      <canvas id="chart" class="nem"></canvas>
+    </div>
+  </div>
+
+  <div class="dashboard" id="dashboard"></div>
+  
+  <div class="dr">
+    <h3>دوست عزیز این سایت یک سایت شخصی هست</h3>
+    <h3>طراحی (فرنت اند) این سایت به دست پارسا احمدی ساخته شده</h3>
+    <h4>امیدوارم که موفق باشی ™</h4>
+  </div>
+
+
+  <script>
+    function resetTodayData() {
+      const todayDate = new Date().toISOString().split("T")[0];
+
+      const subjects = ["زیست", "ریاضی", "فیزیک", "شیمی", "انگلیسی", "تکالیف"];
+
+      subjects.forEach(subject => {
+        let data = JSON.parse(localStorage.getItem(subject));
+        if (data && data[todayDate]) {
+          delete data[todayDate];
+          localStorage.setItem(subject, JSON.stringify(data));
+        }
+      });
+
+      alert("اطلاعات امروز پاک شد.");
+
+
+      if (chart) {
+        chart.destroy();
+        chart = null;
+      }
+    }
+
+    function resetData() {
+      localStorage.removeItem("زیست");
+      localStorage.removeItem("ریاضی");
+      localStorage.removeItem("فیزیک");
+      localStorage.removeItem("شیمی");
+      localStorage.removeItem("انگلیسی");
+      localStorage.removeItem("تکالیف");
+      alert("تمام اطلاعات پاک شد.");
+      // نمودار رو هم پاک می‌کنیم تا دوباره با داده‌های خالی ساخته بشه
+      if (chart) chart.destroy();
+      // فیلدهای ورودی رو هم خالی می‌کنیم (اختیاری)
+      document.getElementById("date").value = new Date().toISOString().split("T")[0];
+      document.getElementById("zist").value = "";
+      document.getElementById("riazi").value = "";
+      document.getElementById("fizik").value = "";
+      document.getElementById("shimi").value = "";
+      document.getElementById("eng").value = "";
+      document.getElementById("tak").value = "";
+    }
+    const todayElement = document.getElementById("today");
+    const today = new Date();
+    todayElement.innerText = "امروز: " + today.toLocaleDateString('fa-IR');
+
+    const dateInput = document.getElementById("date");
+    dateInput.value = new Date().toISOString().split("T")[0];
+
+    let chart;
+
+    function addData(subject) {
+      const date = dateInput.value;
+      if (!date) return;
+
+      let minutes;
+      if (subject === "زیست") minutes = document.getElementById("zist").value;
+      if (subject === "ریاضی") minutes = document.getElementById("riazi").value;
+      if (subject === "فیزیک") minutes = document.getElementById("fizik").value;
+      if (subject === "شیمی") minutes = document.getElementById("shimi").value;
+      if (subject === "انگلیسی") minutes = document.getElementById("eng").value;
+      if (subject === "تکالیف") minutes = document.getElementById("tak").value;
+
+      if (!minutes) return;
+
+      let data = JSON.parse(localStorage.getItem(subject)) || {};
+      data[date] = (data[date] || 0) + parseInt(minutes);
+      localStorage.setItem(subject, JSON.stringify(data));
+
+    }
+
+    function showChart(subject) {
+      let data = JSON.parse(localStorage.getItem(subject)) || {};
+      const labels = Object.keys(data);
+      const values = Object.values(data);
+
+      const ctx = document.getElementById("chart").getContext("2d");
+
+      if (chart) chart.destroy();
+
+      chart = new Chart(ctx, {
+        type: 'line',
+        
+        data: {
+          
+          labels: labels,
+          datasets: [{
+            label: subject,
+            data: values,
+            
+            borderColor: '#0099ff',
+            backgroundColor: '#0077ff2e',
+            fill: true,
+            tension: 0.3
+          }]
+        },
+        options: {
+          color:'#fff',
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: { display: true, text: 'دقیقه',color:'#fff', }
+            },
+            x: {
+              title: { display: true, text: 'تاریخ' ,color:'#fff',}
+            }
+          }
+        }
+      });
+    }
+
+
+
+
+
+
+
+
+        // تنظیمات ساختار دروس
+    const curriculum = [
+        { name: "🧬 زیست‌شناسی", chapters: 7, sections: 3, color: "#00e504" },
+        { name: "📐 ریاضی",      chapters: 7, sections: 3, color: "#fcf800" },
+        { name: "🧪 شیمی",      chapters: 3, sections: 3, color: "#b622a4" },
+        { name: "⚡ فیزیک",     chapters: 4, sections: 3, color: "#7272ff" }
+    ];
+
+    const container = document.getElementById('dashboard');
+
+    // بارگذاری وضعیت از localStorage
+    let progress = JSON.parse(localStorage.getItem('studyProgress')) || {};
+
+    curriculum.forEach((subject, sIdx) => {
+        const card = document.createElement('div');
+        card.className = 'subject-card';
+
+        // ساخت هدر + نمودار دایره‌ای برای هر درس
+        card.innerHTML = `
+            <h2>${subject.name}</h2>
+            <div class="chart-wrap">
+              <div class="chart-box">
+                <svg width="120" height="120" viewBox="0 0 120 120">
+                  <!-- پس‌زمینه حلقه -->
+                  <circle cx="60" cy="60" r="48" stroke="#eee" stroke-width="10" fill="none"></circle>
+                  <!-- حلقه‌ی پیشرفت -->
+                  <circle id="ring-${sIdx}" cx="60" cy="60" r="48"
+                          stroke="${subject.color}" stroke-width="10" fill="none"
+                          stroke-linecap="round"
+                          transform="rotate(-90 60 60)">
+                  </circle>
+                </svg>
+                <div class="percent" id="percent-${sIdx}">0%</div>
+                <div class="label">پیشرفت</div>
+              </div>
+            </div>
+        `;
+
+        // اضافه کردن فصول و بخش‌ها
+        for (let cIdx = 0; cIdx < subject.chapters; cIdx++) {
+            const chapter = document.createElement('div');
+            chapter.className = 'chapter';
+            chapter.innerHTML = `<h3>فصل ${cIdx + 1}</h3>`;
+
+            const sectionsDiv = document.createElement('div');
+            sectionsDiv.className = 'sections';
+
+            for (let secIdx = 0; secIdx < subject.sections; secIdx++) {
+                const key = `${sIdx}-${cIdx}-${secIdx}`;
+                const box = document.createElement('div');
+
+                const isActive = !!progress[key];
+                box.className = 'section-box' + (isActive ? ' active' : '');
+
+                if (isActive) {
+                    box.style.backgroundColor = subject.color;
+                }
+
+                box.onclick = () => {
+                    // تغییر وضعیت بخش
+                    progress[key] = !progress[key];
+                    localStorage.setItem('studyProgress', JSON.stringify(progress));
+                    box.style.backgroundColor = progress[key] ? subject.color : '#ddd';
+
+                    // آپدیت نمودار درس جاری پس از کلیک
+                    updateSubjectChart(subject, sIdx);
+                };
+
+                sectionsDiv.appendChild(box);
+            }
+
+            chapter.appendChild(sectionsDiv);
+            card.appendChild(chapter);
+        }
+
+        container.appendChild(card);
+
+        // محاسبه و تنظیم اولیه‌ی نمودار برای این درس
+        updateSubjectChart(subject, sIdx);
+    });
+
+    // تابع محاسبه و آپدیت نمودار دایره‌ای برای یک درس
+    function updateSubjectChart(subject, sIdx) {
+        let done = 0;
+        let total = subject.chapters * subject.sections;
+
+        for (let cIdx = 0; cIdx < subject.chapters; cIdx++) {
+            for (let secIdx = 0; secIdx < subject.sections; secIdx++) {
+                const key = `${sIdx}-${cIdx}-${secIdx}`;
+                if (progress[key]) done++;
+            }
+        }
+
+        const percent = total ? Math.round((done / total) * 100) : 0;
+
+        // آپدیت متن درصد
+        const percentEl = document.getElementById(`percent-${sIdx}`);
+        if (percentEl) {
+            percentEl.textContent = `${percent}%`;
+        }
+
+        // آپدیت حلقه SVG
+        const ring = document.getElementById(`ring-${sIdx}`);
+        if (ring) {
+            const r = 48;
+            const circumference = 2 * Math.PI * r;
+            ring.style.strokeDasharray = `${circumference}`;
+            ring.style.strokeDashoffset = `${circumference * (1 - percent / 100)}`;
+            ring.style.transition = "stroke-dashoffset 0.4s ease";
+        }
+    }
+    
+    
+  </script>
+
+</body>
+
+
+</html>
