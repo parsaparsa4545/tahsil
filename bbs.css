@@ -1,0 +1,293 @@
+* {
+    margin: 0;
+    box-sizing: border-box;
+    font-family: tahoma;
+}
+
+html {
+    scrollbar-width: thin;
+    scrollbar-color: #10e1fd #000000;
+}
+
+.header {
+    color: #000000;
+    padding: 10px;
+    border-radius: 20px;
+    position: fixed;
+    margin-top: -600px;
+    background-color: #ffffff;
+}
+
+body {
+
+    background: #f4f6f9;
+    background-color: #525252;
+}
+
+.nem {
+    direction: ltr;
+    overflow-x: scroll;
+
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#today {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.rtr {
+    background-image: url(oi.jpg);
+    border-radius: 10px;
+    text-align: center;
+    margin-top: 60px;
+
+}
+
+.cdr {
+    padding: 50px;
+    height: 100%;
+    color: #ffffff;
+    border-bottom: rgb(0, 204, 255) solid 5px;
+    border-top: rgb(0, 157, 255) solid 5px;
+    backdrop-filter: blur(20px);
+}
+
+.container {
+    max-width: 600px;
+    background: rgb(36, 36, 36);
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0, 251, 255, 0.759);
+    border-radius: 10px;
+    margin-top: 50px;
+}
+
+.row {
+    display: flex;
+    margin-bottom: 20px;
+    margin-bottom: 10px;
+}
+
+.ok {
+    width: 50%;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+#tak {
+    background-color: #c3d4e2;
+}
+
+input,
+button {
+    padding: 8px;
+    border-radius: 50px;
+    border: 1px solid #ccc;
+}
+
+button {
+
+    background: #68bbff;
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+    font-size: 20px;
+    transition: 0.5s;
+}
+
+button:hover {
+    background: #3f69ab;
+    color: #ffffff;
+}
+
+canvas {
+    margin-top: 30px;
+}
+
+.der {
+    width: 49.5%;
+    text-align: center;
+}
+
+.res {
+    background-color: red;
+    font-weight: 900;
+    font-size: 30px;
+    color: black;
+    width: 100%;
+}
+
+.am {
+    width: 100%;
+    background-color: rgb(249, 101, 52);
+    border-radius: 50px;
+}
+
+.chart-container {
+    overflow-x: auto;
+    direction: ltr;
+    min-width: 900px;
+    min-height: 600px;
+    margin-right: 5%;
+}
+
+.tam {
+    display: flex;
+    width: 100%;
+
+}
+.nem{
+    margin-top: 120px;
+}
+#chart {
+    border-radius: 50px;
+    box-shadow: 0 0 10px rgba(1, 129, 248, 0.759);
+    margin-left: 50px;
+    background-color: #1d1d1d;
+}
+
+.am:hover {
+    background-color: rgb(160, 45, 7);
+}
+
+.sho {
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    background-image: url(per.jpg);
+    background-size: 100%;
+    color: white;
+    height: 400px;
+
+}
+
+.ss {
+    padding-top: 100px;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(10px);
+    box-shadow: 0px 10px 10px 0 rgba(0, 225, 255, 0.602);
+}
+
+.dashboard {
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.subject-card {
+    background-color: #1d1d1d;
+    width: 400px;
+    padding: 10px;
+    color: #ffffff;
+    border-radius: 50px;
+    box-shadow: #02fffb79 0 0 20px 0;
+    transition: 0.5s;
+}
+
+.dr {
+    background-color: #ccc;
+
+    height: 300px;
+    text-align: center;
+    margin-top: 50px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.dashboard {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.subject-card {
+    background: rgb(37, 37, 37);
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 221, 255, 0.46);
+    width: 300px;
+    text-align: right;
+}
+
+.subject-card h2 {
+    font-size: 1.1em;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.chapter {
+    margin-bottom: 15px;
+    border: 2px solid #ddd;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.chapter h3 {
+    margin: 0 0 10px 0;
+    font-size: 1em;
+    color: #ffffff;
+}
+
+.sections {
+    display: flex;
+
+}
+
+.section-box {
+    flex: 1;
+    height: 30px;
+    background: #ddd;
+    border-left: solid 1px black;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.section-box.active {
+   margin: 0;
+}
+
+/* استایل‌های نمودار دایره‌ای (Donut) */
+.chart-wrap {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0 15px;
+}
+
+.chart-box {
+    width: 120px;
+    height: 120px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chart-box .percent {
+    position: absolute;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.chart-box .label {
+    position: absolute;
+    bottom: -22px;
+    font-size: 12px;
+    color: #666;
+}
